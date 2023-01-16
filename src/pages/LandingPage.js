@@ -1,9 +1,10 @@
 import navlogo from "../assets/images/navlogo.svg";
 import main from "../assets/images/main.svg";
-
+import styled from "styled-components";
+//TODO: ADJUST the nav logo svg image
 const LandingPage = () => {
   return (
-    <main>
+    <Wrapper>
       <nav>
         <img src={navlogo} alt="vv" className="logo" />
       </nav>
@@ -19,12 +20,51 @@ const LandingPage = () => {
             man braid af flexitarian succulents ugh activated charcoal roof
             party.
           </p>
-          <button className="btn btn-hero">Log In/Sign Up</button>
+          <button className="btn btn-hero">Log In / Sign Up</button>
         </div>
-        <img src={main} alt="main" className="img main-img"/>
+        {/*Image (disappears for small screens)*/}
+        <img src={main} alt="main" className="img main-img" />
       </div>
-    </main>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.main`
+  nav {
+    width: var(--fluid-width);
+    max-width: var(--max-width);
+    margin: 0 auto;
+    height: var(--nav-height);
+    display: flex;
+    align-items: center;
+  }
+  .page {
+    min-height: calc(100vh - var(--nav-height));
+    display: grid;
+    align-items: center;
+    margin-top: -1rem;
+  }
+  h1 {
+    font-weight: 700;
+    span {
+      color: var(--primary-500);
+    }
+  }
+  p {
+    color: var(--grey-600);
+  }
+  .main-img {
+    display: none;
+  }
+  @media (min-width: 992px) {
+    .page {
+      grid-template-columns: 1fr 1fr;
+      column-gap: 3rem;
+    }
+    .main-img {
+      display: block;
+    }
+  }
+`;
 
 export default LandingPage;
