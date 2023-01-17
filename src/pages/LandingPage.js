@@ -1,12 +1,13 @@
-import navlogo from "../assets/images/navlogo.svg";
 import main from "../assets/images/main.svg";
 import styled from "styled-components";
-//TODO: ADJUST the nav logo svg image
+import { Logo } from "../components";
+import { Link } from "react-router-dom";
+
 const LandingPage = () => {
   return (
     <Wrapper>
       <nav>
-        <img src={navlogo} alt="vv" className="logo" />
+       <Logo/>
       </nav>
       <div className="container page">
         {/*info div*/}
@@ -20,7 +21,7 @@ const LandingPage = () => {
             man braid af flexitarian succulents ugh activated charcoal roof
             party.
           </p>
-          <button className="btn btn-hero">Log In / Sign Up</button>
+          <Link to="/register" className="btn btn-hero">Log In / Sign Up</Link>
         </div>
         {/*Image (disappears for small screens)*/}
         <img src={main} alt="main" className="img main-img" />
