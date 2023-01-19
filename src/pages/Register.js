@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
-import { Logo, FormInput } from "../components";
+import { Logo, FormInput, Alert } from "../components";
 import Wrapper from "../assets/wrappers/RegisterPage";
+//TODO: showAlert and is registered will depend on future Context values
 
 const initialState = {
   name: "",
   email: "",
   password: "",
   isRegistered: false,
+  showAlert: false,
 };
 
 const Register = () => {
@@ -26,6 +28,7 @@ const Register = () => {
       <form className="form" onSubmit={onSubmit}>
         <Logo />
         <h3>Log In</h3>
+        {values.showAlert && <Alert />}
         <FormInput
           type="text"
           name="name"
