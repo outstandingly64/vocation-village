@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Logo, FormInput, Alert } from "../components";
 import Wrapper from "../assets/wrappers/RegisterPage";
-//TODO: showAlert and is registered will depend on future Context values
+//TODO: showAlert will depend on future Context values
 
 const initialState = {
   name: "",
@@ -13,6 +13,7 @@ const initialState = {
 
 const Register = () => {
   const [values, setValues] = useState(initialState);
+  const { name, email, password, isRegistered, showAlert } = values;
 
   const handleChange = (e) => {
     console.log(e.target);
@@ -23,33 +24,49 @@ const Register = () => {
     console.log(e.target);
   };
 
+  const toggleIsRegistered = () => {
+    setValues({ ...values, isRegistered: !isRegistered });
+  };
+
   return (
     <Wrapper className="full-page">
       <form className="form" onSubmit={onSubmit}>
         <Logo />
-        <h3>Log In</h3>
-        {values.showAlert && <Alert />}
-        <FormInput
-          type="text"
-          name="name"
-          value={values.name}
-          handleChange={handleChange}
-        />
+        <h3>{isRegistered ? "Log In" : "Sign Up"}</h3>
+        {showAlert && <Alert />}
+        {!isRegistered && (
+          <FormInput
+            type="text"
+            name="name"
+            value={name}
+            handleChange={handleChange}
+          />
+        )}
         <FormInput
           type="email"
           name="email"
-          value={values.email}
+          value={email}
           handleChange={handleChange}
         />
         <FormInput
           type="password"
           name="password"
-          value={values.password}
+          value={password}
           handleChange={handleChange}
         />
         <button type="submit" className="btn btn-block">
           Submit
         </button>
+        <p>
+          {isRegistered ? "Not a member yet?" : "Already a member?"}
+          <button
+            type="button"
+            onClick={toggleIsRegistered}
+            className="member-btn"
+          >
+            {isRegistered ? "Sign Up" : "Log In"}
+          </button>
+        </p>
       </form>
     </Wrapper>
   );
