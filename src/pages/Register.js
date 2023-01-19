@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
 import { Logo, FormInput, Alert } from "../components";
 import Wrapper from "../assets/wrappers/RegisterPage";
-//TODO: showAlert will depend on future Context values
+import { useAppContext } from "../context/appContext";
 
 const initialState = {
   name: "",
   email: "",
   password: "",
   isRegistered: false,
-  showAlert: false,
 };
 
 const Register = () => {
   const [values, setValues] = useState(initialState);
-  const { name, email, password, isRegistered, showAlert } = values;
+  const { name, email, password, isRegistered } = values;
+  const {isLoading, showAlert} = useAppContext();
 
   const handleChange = (e) => {
     console.log(e.target);
