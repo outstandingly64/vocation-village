@@ -1,6 +1,13 @@
 import React, { useReducer, useContext } from "react";
-import { CLEAR_ALERT, DISPLAY_ALERT, SIGNUP_BEGIN, SIGNUP_COMPLETE, SIGNUP_ERROR } from "./actions";
+import {
+  CLEAR_ALERT,
+  DISPLAY_ALERT,
+  SIGNUP_BEGIN,
+  SIGNUP_COMPLETE,
+  SIGNUP_ERROR,
+} from "./actions";
 import reducer from "./reducer";
+import axios from "axios";
 
 const initialState = {
   isLoading: false,
@@ -8,7 +15,8 @@ const initialState = {
   alertText: "",
   alertType: "",
   user: null,
-  email: null,
+  userLocation: "",
+  jobLocation: "",
   token: null,
 };
 
@@ -30,7 +38,22 @@ const AppProvider = ({ children }) => {
   };
 
   const signUpUser = async (currentUser) => {
-    console.log(currentUser);
+    dispatch({ type: SIGNUP_BEGIN });
+
+    try {
+      const response = await axios.post("/api/auth/signup", currentUser);
+      console.log(response);
+      const { user, token, location } = response.data;
+      dispatch({type: SIGNUP_COMPLETE, payload: {user, token, location}});
+      //TODO: Save the user to localStorage
+    } catch (error) {
+      console.log(error.response);
+      dispatch({
+        type: SIGNUP_ERROR,
+        payload: { message: error.response.data.message },
+      });
+    }
+    clearAlert();
   };
 
   return (
