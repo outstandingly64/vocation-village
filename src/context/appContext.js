@@ -6,18 +6,26 @@ import {
   SIGNUP_COMPLETE,
   SIGNUP_ERROR,
 } from "./actions";
+import {
+  addUserToLocalStorage,
+  removeUserFromLocalStorage,
+} from "../helpers/local-storage";
 import reducer from "./reducer";
 import axios from "axios";
+
+const token = localStorage.getItem("token");
+const user = localStorage.getItem("user");
+const userLocation = localStorage.getItem("location");
 
 const initialState = {
   isLoading: false,
   showAlert: false,
   alertText: "",
   alertType: "",
-  user: null,
-  userLocation: "",
-  jobLocation: "",
-  token: null,
+  user: user ? JSON.parse(user) : null,
+  userLocation: userLocation || null,
+  jobLocation: userLocation || null,
+  token: token,
 };
 
 const AppContext = React.createContext();
@@ -42,12 +50,10 @@ const AppProvider = ({ children }) => {
 
     try {
       const response = await axios.post("/api/auth/signup", currentUser);
-      console.log(response);
       const { user, token, location } = response.data;
-      dispatch({type: SIGNUP_COMPLETE, payload: {user, token, location}});
-      //TODO: Save the user to localStorage
+      dispatch({ type: SIGNUP_COMPLETE, payload: { user, token, location } });
+      addUserToLocalStorage({ user, token, location });
     } catch (error) {
-      console.log(error.response);
       dispatch({
         type: SIGNUP_ERROR,
         payload: { message: error.response.data.message },
