@@ -5,6 +5,9 @@ import {
   SIGNUP_BEGIN,
   SIGNUP_COMPLETE,
   SIGNUP_ERROR,
+  LOGIN_BEGIN,
+  LOGIN_COMPLETE,
+  LOGIN_ERROR,
 } from "./actions";
 import {
   addUserToLocalStorage,
@@ -62,8 +65,12 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
+  const logInUser = async (currentUser) => {
+    console.log(currentUser);
+  };
+
   return (
-    <AppContext.Provider value={{ ...state, displayAlert, signUpUser }}>
+    <AppContext.Provider value={{ ...state, displayAlert, signUpUser, logInUser }}>
       {children}
     </AppContext.Provider>
   );

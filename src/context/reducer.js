@@ -4,6 +4,9 @@ import {
   SIGNUP_BEGIN,
   SIGNUP_COMPLETE,
   SIGNUP_ERROR,
+  LOGIN_BEGIN,
+  LOGIN_COMPLETE,
+  LOGIN_ERROR,
 } from "./actions";
 
 const reducer = (state, action) => {
