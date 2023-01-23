@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Logo, FormInput, Alert } from "../components";
 import Wrapper from "../assets/wrappers/RegisterPage";
 import { useAppContext } from "../context/appContext";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const initialState = {
   name: "",
@@ -15,7 +15,13 @@ const Register = () => {
   const navigate = useNavigate();
   const [values, setValues] = useState(initialState);
   const { name, email, password, isRegistered } = values;
-  const { user, isLoading, showAlert, displayAlert, signUpUser, logInUser } = useAppContext();
+  const {
+    user,
+    isLoading,
+    showAlert,
+    displayAlert,
+    authenticateUser,
+  } = useAppContext();
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -23,16 +29,17 @@ const Register = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    if(!email || !password || (!isRegistered && !name)){
+    if (!email || !password || (!isRegistered && !name)) {
       displayAlert();
       return;
     }
 
-    const currentUser = {name, email, password};
-    if(isRegistered){
-      logInUser(currentUser);
-    }else{
-      signUpUser(currentUser);
+    const currentUser = { name, email, password };
+    if (isRegistered) {
+      authenticateUser({currentUser, endpoint: 'login', alertText: 'Welcome back'});
+    } else {
+      authenticateUser({currentUser, endpoint: 'signup', alertText: 'Sign up successful'});
+
     }
   };
 
@@ -41,9 +48,9 @@ const Register = () => {
   };
 
   useEffect(() => {
-    if(user){
+    if (user) {
       setTimeout(() => {
-        navigate('/');
+        navigate("/");
       }, 3000);
     }
   }, [user, navigate]);

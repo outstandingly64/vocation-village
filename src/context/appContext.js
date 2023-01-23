@@ -2,12 +2,9 @@ import React, { useReducer, useContext } from "react";
 import {
   CLEAR_ALERT,
   DISPLAY_ALERT,
-  SIGNUP_BEGIN,
-  SIGNUP_COMPLETE,
-  SIGNUP_ERROR,
-  LOGIN_BEGIN,
-  LOGIN_COMPLETE,
-  LOGIN_ERROR,
+  AUTH_BEGIN,
+  AUTH_COMPLETE,
+  AUTH_ERROR,
 } from "./actions";
 import {
   addUserToLocalStorage,
@@ -48,29 +45,25 @@ const AppProvider = ({ children }) => {
     }, 2500);
   };
 
-  const signUpUser = async (currentUser) => {
-    dispatch({ type: SIGNUP_BEGIN });
+  const authenticateUser = async ({currentUser, endpoint, alertText}) => {
+    dispatch({ type: AUTH_BEGIN });
 
     try {
-      const response = await axios.post("/api/auth/signup", currentUser);
+      const response = await axios.post(`/api/auth/${endpoint}`, currentUser);
       const { user, token, location } = response.data;
-      dispatch({ type: SIGNUP_COMPLETE, payload: { user, token, location } });
+      dispatch({ type: AUTH_COMPLETE, payload: { user, token, location, alertText } });
       addUserToLocalStorage({ user, token, location });
     } catch (error) {
       dispatch({
-        type: SIGNUP_ERROR,
+        type: AUTH_ERROR,
         payload: { message: error.response.data.message },
       });
     }
     clearAlert();
-  };
-
-  const logInUser = async (currentUser) => {
-    console.log(currentUser);
-  };
+  }
 
   return (
-    <AppContext.Provider value={{ ...state, displayAlert, signUpUser, logInUser }}>
+    <AppContext.Provider value={{ ...state, displayAlert, authenticateUser }}>
       {children}
     </AppContext.Provider>
   );

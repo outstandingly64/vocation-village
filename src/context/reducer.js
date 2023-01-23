@@ -1,12 +1,9 @@
 import {
   DISPLAY_ALERT,
   CLEAR_ALERT,
-  SIGNUP_BEGIN,
-  SIGNUP_COMPLETE,
-  SIGNUP_ERROR,
-  LOGIN_BEGIN,
-  LOGIN_COMPLETE,
-  LOGIN_ERROR,
+  AUTH_BEGIN,
+  AUTH_COMPLETE,
+  AUTH_ERROR,
 } from "./actions";
 
 const reducer = (state, action) => {
@@ -26,11 +23,11 @@ const reducer = (state, action) => {
       alertText: "",
     };
   }
-  if (action.type === SIGNUP_BEGIN) {
+  if (action.type === AUTH_BEGIN) {
     return { ...state, isLoading: true };
   }
-  if (action.type === SIGNUP_COMPLETE) {
-    const { token, user, location } = action.payload;
+  if (action.type === AUTH_COMPLETE) {
+    const { token, user, location, alertText } = action.payload;
     return {
       ...state,
       isLoading: false,
@@ -40,10 +37,10 @@ const reducer = (state, action) => {
       jobLocation: location,
       showAlert: true,
       alertType: "success",
-      alertText: "Sign Up Succcessful! Redirecting to dashboard...",
+      alertText: `${alertText}! Redirecting to dashboard...`,
     };
   }
-  if (action.type === SIGNUP_ERROR) {
+  if (action.type === AUTH_ERROR) {
     const { message } = action.payload;
     return {
       ...state,
