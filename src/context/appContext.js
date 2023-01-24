@@ -6,6 +6,7 @@ import {
   AUTH_COMPLETE,
   AUTH_ERROR,
   TOGGLE_SIDEBAR,
+  LOGOUT_USER
 } from "./actions";
 import {
   addUserToLocalStorage,
@@ -68,8 +69,13 @@ const AppProvider = ({ children }) => {
     dispatch({type: TOGGLE_SIDEBAR});
   }
 
+  const logoutUser = () => {
+    dispatch({type: LOGOUT_USER});
+    removeUserFromLocalStorage();
+  }
+
   return (
-    <AppContext.Provider value={{ ...state, displayAlert, authenticateUser, toggleSidebar }}>
+    <AppContext.Provider value={{ ...state, displayAlert, authenticateUser, toggleSidebar, logoutUser }}>
       {children}
     </AppContext.Provider>
   );
