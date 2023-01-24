@@ -5,6 +5,7 @@ import {
   AUTH_BEGIN,
   AUTH_COMPLETE,
   AUTH_ERROR,
+  TOGGLE_SIDEBAR,
 } from "./actions";
 import {
   addUserToLocalStorage,
@@ -26,6 +27,7 @@ const initialState = {
   userLocation: userLocation || null,
   jobLocation: userLocation || null,
   token: token,
+  showSidebar: false,
 };
 
 const AppContext = React.createContext();
@@ -62,8 +64,12 @@ const AppProvider = ({ children }) => {
     clearAlert();
   }
 
+  const toggleSidebar = () => {
+    dispatch({type: TOGGLE_SIDEBAR});
+  }
+
   return (
-    <AppContext.Provider value={{ ...state, displayAlert, authenticateUser }}>
+    <AppContext.Provider value={{ ...state, displayAlert, authenticateUser, toggleSidebar }}>
       {children}
     </AppContext.Provider>
   );

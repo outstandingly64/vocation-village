@@ -5,3 +5,5 @@ export const CLEAR_ALERT = 'CLEAR_ALERT';
 export const AUTH_BEGIN = 'AUTH_BEGIN';
 export const AUTH_COMPLETE = 'AUTH_COMPLETE';
 export const AUTH_ERROR= 'AUTH_ERROR';
+// TOGGLE ACTIONS
+export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';

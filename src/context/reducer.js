@@ -4,6 +4,7 @@ import {
   AUTH_BEGIN,
   AUTH_COMPLETE,
   AUTH_ERROR,
+  TOGGLE_SIDEBAR
 } from "./actions";
 
 const reducer = (state, action) => {
@@ -48,6 +49,12 @@ const reducer = (state, action) => {
       showAlert: true,
       alertType: "danger",
       alertText: message,
+    };
+  }
+  if (action.type === TOGGLE_SIDEBAR) {
+    return {
+      ...state,
+      showSidebar: !state.showSidebar
     };
   }
   throw new Error(`404 action: ${action.type}`);
