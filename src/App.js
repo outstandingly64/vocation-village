@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { LandingPage, Register, Error } from "./pages";
+import { LandingPage, Register, Error, ProtectedPage } from "./pages";
 import {
   AllJobs,
   AddJob,
@@ -12,7 +12,14 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<SharedLayout />}>
+        <Route
+          path="/"
+          element={
+            <ProtectedPage>
+              <SharedLayout />
+            </ProtectedPage>
+          }
+        >
           <Route index element={<Stats />} />
           <Route path="all-jobs" element={<AllJobs />} />
           <Route path="add-job" element={<AddJob />} />
