@@ -1,6 +1,6 @@
 const AddJobs = () => {
   return (
-    <div>AddJobs</div>
+    <h1>AllJobs</h1>
   )
 }
 
