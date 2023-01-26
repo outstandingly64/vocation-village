@@ -1,9 +1,30 @@
 import Wrapper from "../assets/wrappers/SmallSidebar";
+import { FaTimes } from "react-icons/fa";
+import { useAppContext } from "../context/appContext";
+import links from "../utils/links";
+import { NavLink } from "react-router-dom";
+import Logo from "./Logo";
 
 const SmallSidebar = () => {
   return (
     <Wrapper>
-      <h3>Small Sidebar</h3>
+      <div className="sidebar-container show-sidebar">
+        <div className="content">
+          <button
+            type="button"
+            className="close-btn"
+            onClick={() => console.log("close sidebar")}
+          >
+            <FaTimes/>
+          </button>
+          <header>
+            <Logo/>
+          </header>
+          <div className="nav-links">
+            Nav linksss
+          </div>
+        </div>
+      </div>
     </Wrapper>
   );
 };
