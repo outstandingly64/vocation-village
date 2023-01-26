@@ -6,23 +6,38 @@ import { NavLink } from "react-router-dom";
 import Logo from "./Logo";
 
 const SmallSidebar = () => {
+  const { showSidebar, toggleSidebar } = useAppContext();
+  const navigateLinks = links.map((link) => {
+    const { id, text, path, icon } = link;
+
+    return (
+      <NavLink
+        to={path}
+        key={id}
+        onClick={toggleSidebar}
+        className={({isActive})=>isActive ? 'nav-link active' :"nav-link"}
+      >
+        <span className="icon">{icon}</span>
+        {text}
+      </NavLink>
+    );
+  });
+
   return (
     <Wrapper>
-      <div className="sidebar-container show-sidebar">
+      <div
+        className={
+          showSidebar ? `sidebar-container show-sidebar` : `sidebar-container`
+        }
+      >
         <div className="content">
-          <button
-            type="button"
-            className="close-btn"
-            onClick={() => console.log("close sidebar")}
-          >
-            <FaTimes/>
+          <button type="button" className="close-btn" onClick={toggleSidebar}>
+            <FaTimes />
           </button>
           <header>
-            <Logo/>
+            <Logo />
           </header>
-          <div className="nav-links">
-            Nav linksss
-          </div>
+          <div className="nav-links">{navigateLinks}</div>
         </div>
       </div>
     </Wrapper>
