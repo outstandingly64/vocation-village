@@ -6,7 +6,7 @@ import {
   AUTH_COMPLETE,
   AUTH_ERROR,
   TOGGLE_SIDEBAR,
-  LOGOUT_USER
+  LOGOUT_USER,
 } from "./actions";
 import {
   addUserToLocalStorage,
@@ -48,13 +48,16 @@ const AppProvider = ({ children }) => {
     }, 2500);
   };
 
-  const authenticateUser = async ({currentUser, endpoint, alertText}) => {
+  const authenticateUser = async ({ currentUser, endpoint, alertText }) => {
     dispatch({ type: AUTH_BEGIN });
 
     try {
       const response = await axios.post(`/api/auth/${endpoint}`, currentUser);
       const { user, token, location } = response.data;
-      dispatch({ type: AUTH_COMPLETE, payload: { user, token, location, alertText } });
+      dispatch({
+        type: AUTH_COMPLETE,
+        payload: { user, token, location, alertText },
+      });
       addUserToLocalStorage({ user, token, location });
     } catch (error) {
       dispatch({
@@ -63,19 +66,31 @@ const AppProvider = ({ children }) => {
       });
     }
     clearAlert();
-  }
+  };
 
   const toggleSidebar = () => {
-    dispatch({type: TOGGLE_SIDEBAR});
-  }
+    dispatch({ type: TOGGLE_SIDEBAR });
+  };
 
   const logoutUser = () => {
-    dispatch({type: LOGOUT_USER});
+    dispatch({ type: LOGOUT_USER });
     removeUserFromLocalStorage();
-  }
+  };
 
+  const updateUser = (currentUser) => {
+    console.log(currentUser);
+  };
   return (
-    <AppContext.Provider value={{ ...state, displayAlert, authenticateUser, toggleSidebar, logoutUser }}>
+    <AppContext.Provider
+      value={{
+        ...state,
+        displayAlert,
+        authenticateUser,
+        toggleSidebar,
+        logoutUser,
+        updateUser,
+      }}
+    >
       {children}
     </AppContext.Provider>
   );
