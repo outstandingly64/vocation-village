@@ -76,9 +76,55 @@ const AppProvider = ({ children }) => {
     dispatch({ type: LOGOUT_USER });
     removeUserFromLocalStorage();
   };
+  
+  /**
+   * Creating an custom axios instance prevents attaching 
+   * auth bearer token to every request made with axios.
+   */
+  const authFetch = axios.create({
+    baseURL: '/api',
+    headers: {
+      Authorization: `Bearer ${state.token}`,
+    }
+  });
 
-  const updateUser = (currentUser) => {
-    console.log(currentUser);
+  //Handling 401 Errors with Axios
+  //Requests
+  authFetch.interceptors.request.use(
+    (config)=>{
+      config.headers['Authorization'] = `Bearer ${state.token}`;
+      return config;
+    }, (error)=>{
+      return Promise.reject(error);
+    }
+  );
+
+   //Response
+   authFetch.interceptors.response.use(
+    (response)=>{
+      return response;
+    }, (error)=>{
+      console.log(error.response);
+      if(error.response.status === 401){
+        console.log('Authentication Error!');
+      }
+      return Promise.reject(error);
+    }
+  );
+
+  const updateUser = async (currentUser) => {
+    const backendUrl = "/auth/updateUser";
+
+    try {
+      const { data } = await authFetch.patch(
+        backendUrl,
+        currentUser,
+      );
+
+      console.log(data);
+    } catch (error) {
+      //console.log(error.response);
+    }
   };
   return (
     <AppContext.Provider

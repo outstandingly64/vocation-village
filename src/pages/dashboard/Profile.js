@@ -18,7 +18,7 @@ const Profile = () => {
       displayAlert();
       return;
     }
-    console.log("user updated handler");
+    updateUser({name, email, lastName, location});
   };
 
   return (
