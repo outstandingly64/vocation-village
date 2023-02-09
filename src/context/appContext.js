@@ -7,6 +7,9 @@ import {
   AUTH_ERROR,
   TOGGLE_SIDEBAR,
   LOGOUT_USER,
+  UPDATE_USER_BEGIN,
+  UPDATE_USER_COMPLETE,
+  UPDATE_USER_ERROR,
 } from "./actions";
 import {
   addUserToLocalStorage,
@@ -76,37 +79,40 @@ const AppProvider = ({ children }) => {
     dispatch({ type: LOGOUT_USER });
     removeUserFromLocalStorage();
   };
-  
+
   /**
-   * Creating an custom axios instance prevents attaching 
+   * Creating an custom axios instance prevents attaching
    * auth bearer token to every request made with axios.
    */
   const authFetch = axios.create({
-    baseURL: '/api',
+    baseURL: "/api",
     headers: {
       Authorization: `Bearer ${state.token}`,
-    }
+    },
   });
 
   //Handling 401 Errors with Axios
   //Requests
   authFetch.interceptors.request.use(
-    (config)=>{
-      config.headers['Authorization'] = `Bearer ${state.token}`;
+    (config) => {
+      config.headers["Authorization"] = `Bearer ${state.token}`;
       return config;
-    }, (error)=>{
+    },
+    (error) => {
       return Promise.reject(error);
     }
   );
 
-   //Response
-   authFetch.interceptors.response.use(
-    (response)=>{
+  //Response
+  authFetch.interceptors.response.use(
+    (response) => {
       return response;
-    }, (error)=>{
+    },
+    (error) => {
       console.log(error.response);
-      if(error.response.status === 401){
-        console.log('Authentication Error!');
+      if (error.response.status === 401) {
+        console.log("Authentication Error!");
+        logoutUser();
       }
       return Promise.reject(error);
     }
@@ -114,17 +120,27 @@ const AppProvider = ({ children }) => {
 
   const updateUser = async (currentUser) => {
     const backendUrl = "/auth/updateUser";
-
+    dispatch({ type: UPDATE_USER_BEGIN });
     try {
-      const { data } = await authFetch.patch(
-        backendUrl,
-        currentUser,
-      );
+      const { data } = await authFetch.patch(backendUrl, currentUser);
 
-      console.log(data);
+      const { user, location, token } = data;
+
+      dispatch({
+        type: UPDATE_USER_COMPLETE,
+        payload: { user, location, token },
+      });
+      // Must also update the user info in local storage
+      addUserToLocalStorage({ user, location, token });
     } catch (error) {
-      //console.log(error.response);
+      if (error.response.status !== 401) {
+        dispatch({
+          type: UPDATE_USER_ERROR,
+          payload: { message: error.response.data.message },
+        });
+      }
     }
+    clearAlert();
   };
   return (
     <AppContext.Provider
